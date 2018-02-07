@@ -13,8 +13,12 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
-public class DiscordBot {
+public class EvilBot {
 
 
     /**
@@ -43,14 +47,14 @@ public class DiscordBot {
 
 
 
-    private static DiscordBot bot;
+    private static EvilBot bot;
 
     private static List<Command> commands = new ArrayList<>();
 
     private static JDA jda;
     private static Data data;
 
-    public DiscordBot(){
+    public EvilBot(){
         bot = this;
     }
 
@@ -66,11 +70,8 @@ public class DiscordBot {
         jda.addEventListener(new MessageListener(bot));
         jda.setAutoReconnect(true);
 
-        if(data.getGame() != null || data.getGame().equalsIgnoreCase("null"))
-            jda.getPresence().setPresence(OnlineStatus.valueOf(data.getStatus()), Game.playing(data.getGame()), true);
-
-
-        addCommand(new EightBall());
+        updateServers();
+        addCommands();
     }
 
     private static void addCommand(Command clazz){
@@ -87,5 +88,20 @@ public class DiscordBot {
                 return;
             }
         }
+    }
+
+    private static void addCommands(){
+        addCommand(new EightBall());
+    }
+
+    private static void updateServers(){
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
+        Runnable runnable = () -> {
+            if(data.getGame() != null || data.getGame().equalsIgnoreCase("null"))
+                jda.getPresence().setPresence(OnlineStatus.valueOf(data.getStatus()), Game.playing(data.getGame().replace("%servers%", String.valueOf(jda.getGuilds().size()))), true);
+        };
+
+        executor.scheduleAtFixedRate(runnable, 0, 300, TimeUnit.SECONDS);
     }
 }
