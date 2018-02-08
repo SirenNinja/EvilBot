@@ -3,6 +3,7 @@ package me.sirenninja.discordbot;
 import me.sirenninja.discordbot.commands.Command;
 import me.sirenninja.discordbot.commands.EightBall;
 import me.sirenninja.discordbot.data.Data;
+import me.sirenninja.discordbot.listeners.JoinAndLeaveListeners;
 import me.sirenninja.discordbot.listeners.MessageListener;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -54,12 +55,9 @@ public class EvilBot {
     private static JDA jda;
     private static Data data;
 
-    public EvilBot(){
-        bot = this;
-    }
-
     public static void main(String[] args) throws Exception{
         data = new Data();
+        bot = new EvilBot();
 
         if(data.getKey().equalsIgnoreCase("DISCORD-API-KEY")) {
             System.out.println("Config has been created and loaded! Please look at the file and restart!");
@@ -68,6 +66,7 @@ public class EvilBot {
 
         jda = new JDABuilder(AccountType.BOT).setToken(data.getKey()).setStatus(OnlineStatus.valueOf(data.getStatus())).buildAsync();
         jda.addEventListener(new MessageListener(bot));
+        jda.addEventListener(new JoinAndLeaveListeners());
         jda.setAutoReconnect(true);
 
         updateServers();

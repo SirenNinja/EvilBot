@@ -2,6 +2,7 @@ package me.sirenninja.discordbot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -14,12 +15,15 @@ public class EightBall implements Command {
 
     @Override
     public List<String> getAliases() {
-        return null;
+        return Arrays.asList("eightball", "ball");
     }
 
     @Override
     public void onCommand(MessageReceivedEvent event){
-        event.getChannel().sendMessage("8ball says: " + getRandomAnswer()).complete();
+        String[] args = event.getMessage().getContentRaw().split(" ");
+
+        if(args.length > 3)
+            event.getChannel().sendMessage("8ball says: " + getRandomAnswer()).complete();
     }
 
     private String getRandomAnswer(){
