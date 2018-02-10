@@ -1,12 +1,12 @@
-package me.sirenninja.discordbot;
+package me.sirenninja.evilbot;
 
-import me.sirenninja.discordbot.commands.Command;
-import me.sirenninja.discordbot.commands.fun.EightBall;
-import me.sirenninja.discordbot.commands.general.UserStats;
-import me.sirenninja.discordbot.data.Data;
-import me.sirenninja.discordbot.listeners.JoinAndLeaveListeners;
-import me.sirenninja.discordbot.listeners.MessageListener;
-import me.sirenninja.discordbot.listeners.Ready;
+import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.fun.EightBall;
+import me.sirenninja.evilbot.commands.general.UserStats;
+import me.sirenninja.evilbot.data.Data;
+import me.sirenninja.evilbot.listeners.JoinAndLeaveListeners;
+import me.sirenninja.evilbot.listeners.MessageListener;
+import me.sirenninja.evilbot.listeners.Ready;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

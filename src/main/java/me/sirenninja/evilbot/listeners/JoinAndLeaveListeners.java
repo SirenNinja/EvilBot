@@ -1,4 +1,4 @@
-package me.sirenninja.discordbot.listeners;
+package me.sirenninja.evilbot.listeners;
 
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
@@ -6,8 +6,8 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
 
-import static me.sirenninja.discordbot.utils.Utils.getRandomColor;
-import static me.sirenninja.discordbot.utils.Utils.embedBuilder;
+import static me.sirenninja.evilbot.utils.Utils.getRandomColor;
+import static me.sirenninja.evilbot.utils.Utils.embedBuilder;
 
 public class JoinAndLeaveListeners extends ListenerAdapter {
 

@@ -1,10 +1,10 @@
-package me.sirenninja.discordbot.listeners;
+package me.sirenninja.evilbot.listeners;
 
-import me.sirenninja.discordbot.EvilBot;
+import me.sirenninja.evilbot.EvilBot;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import static me.sirenninja.discordbot.utils.Utils.isInArray;
+import static me.sirenninja.evilbot.utils.Utils.isInArray;
 
 public class MessageListener extends ListenerAdapter {
 

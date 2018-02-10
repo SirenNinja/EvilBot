@@ -1,6 +1,6 @@
-package me.sirenninja.discordbot.commands.fun;
+package me.sirenninja.evilbot.commands.fun;
 
-import me.sirenninja.discordbot.commands.Command;
+import me.sirenninja.evilbot.commands.Command;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.Arrays;

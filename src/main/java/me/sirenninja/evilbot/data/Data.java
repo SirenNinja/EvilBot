@@ -1,9 +1,9 @@
-package me.sirenninja.discordbot.data;
+package me.sirenninja.evilbot.data;
 
 import java.io.*;
 import java.util.Properties;
 
-import static me.sirenninja.discordbot.utils.Utils.*;
+import static me.sirenninja.evilbot.utils.Utils.*;
 
 public class Data {
 

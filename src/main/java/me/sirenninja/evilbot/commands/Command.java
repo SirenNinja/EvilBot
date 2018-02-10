@@ -1,4 +1,4 @@
-package me.sirenninja.discordbot.commands;
+package me.sirenninja.evilbot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 

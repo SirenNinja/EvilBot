@@ -1,6 +1,6 @@
-package me.sirenninja.discordbot.commands.general;
+package me.sirenninja.evilbot.commands.general;
 
-import me.sirenninja.discordbot.commands.Command;
+import me.sirenninja.evilbot.commands.Command;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

@@ -1,4 +1,4 @@
-package me.sirenninja.discordbot.utils;
+package me.sirenninja.evilbot.utils;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 

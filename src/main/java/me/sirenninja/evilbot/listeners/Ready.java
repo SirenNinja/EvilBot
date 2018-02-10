@@ -1,6 +1,6 @@
-package me.sirenninja.discordbot.listeners;
+package me.sirenninja.evilbot.listeners;
 
-import me.sirenninja.discordbot.EvilBot;
+import me.sirenninja.evilbot.EvilBot;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.events.ReadyEvent;
