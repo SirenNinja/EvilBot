@@ -1,23 +1,20 @@
 package me.sirenninja.discordbot;
 
 import me.sirenninja.discordbot.commands.Command;
-import me.sirenninja.discordbot.commands.EightBall;
+import me.sirenninja.discordbot.commands.fun.EightBall;
+import me.sirenninja.discordbot.commands.general.UserStats;
 import me.sirenninja.discordbot.data.Data;
 import me.sirenninja.discordbot.listeners.JoinAndLeaveListeners;
 import me.sirenninja.discordbot.listeners.MessageListener;
+import me.sirenninja.discordbot.listeners.Ready;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class EvilBot {
 
@@ -64,13 +61,14 @@ public class EvilBot {
             return;
         }
 
+        addCommands();
+
         jda = new JDABuilder(AccountType.BOT).setToken(data.getKey()).setStatus(OnlineStatus.valueOf(data.getStatus())).buildAsync();
-        jda.addEventListener(new MessageListener(bot));
-        jda.addEventListener(new JoinAndLeaveListeners());
         jda.setAutoReconnect(true);
 
-        updateServers();
-        addCommands();
+        jda.addEventListener(new MessageListener(bot));
+        jda.addEventListener(new JoinAndLeaveListeners());
+        jda.addEventListener(new Ready(bot));
     }
 
     private static void addCommand(Command clazz){
@@ -91,16 +89,18 @@ public class EvilBot {
 
     private static void addCommands(){
         addCommand(new EightBall());
+        addCommand(new UserStats());
     }
 
-    private static void updateServers(){
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+    public Data getData(){
+        return data;
+    }
 
-        Runnable runnable = () -> {
-            if(data.getGame() != null || data.getGame().equalsIgnoreCase("null"))
-                jda.getPresence().setPresence(OnlineStatus.valueOf(data.getStatus()), Game.playing(data.getGame().replace("%servers%", String.valueOf(jda.getGuilds().size()))), true);
-        };
+    public JDA getJDA(){
+        return jda;
+    }
 
-        executor.scheduleAtFixedRate(runnable, 0, 300, TimeUnit.SECONDS);
+    public static EvilBot getBot() {
+        return bot;
     }
 }
