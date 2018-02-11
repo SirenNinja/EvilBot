@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.sirenninja.discordbot</groupId>
-    <artifactId>DiscordBot</artifactId>
+    <groupId>me.sirenninja.evilbot</groupId>
+    <artifactId>EvilBot</artifactId>
     <version>1.0</version>
 
     <build>
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.4.0_317</version>
+            <version>3.5.0_338</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

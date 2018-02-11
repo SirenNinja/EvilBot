@@ -9,6 +9,19 @@ import java.util.Random;
 
 public class EightBall implements Command {
 
+    private String[] aliases = {"eightball", "ball"};
+    private boolean enabled = true;
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void setEnabled(boolean state) {
+        enabled = state;
+    }
+
     @Override
     public String getCommand() {
         return "8ball";
@@ -16,7 +29,7 @@ public class EightBall implements Command {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("eightball", "ball");
+        return Arrays.asList(aliases);
     }
 
     @Override

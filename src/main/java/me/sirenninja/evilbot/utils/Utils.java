@@ -12,10 +12,32 @@ public class Utils {
         return Arrays.asList(array).contains(value);
     }
 
+    /**
+     * Checks if the string is actually a number using Regex.
+     * @param s
+     *        The string that get's checked.
+     * @return
+     *        True if the string is actually a number, else false.
+     */
     public static boolean isNumber(String s){
         return s.matches("\\d+");
     }
 
+    /**
+     * Creates a simples EmbedBuilder.
+     * @param author
+     *        The author.
+     * @param title
+     *        The title.
+     * @param message
+     *        The description.
+     * @param avatar
+     *        The avatar.
+     * @param color
+     *        The color.
+     * @return
+     *        A built EmbedBuilder.
+     */
     public static EmbedBuilder embedBuilder(String author, String title, String message, String avatar, Color color){
         EmbedBuilder emBuilder = new EmbedBuilder();
         emBuilder.setAuthor(author);
@@ -30,6 +52,11 @@ public class Utils {
         return emBuilder;
     }
 
+    /**
+     * get's a random rainbow Color
+     * @return
+     *        A random Color.
+     */
     public static Color getRandomColor(){
         Color color = new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
 

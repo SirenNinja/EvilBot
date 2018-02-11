@@ -8,10 +8,14 @@ import static me.sirenninja.evilbot.utils.Utils.isInArray;
 
 public class MessageListener extends ListenerAdapter {
 
+    // The EvilBot instance.
     private EvilBot bot;
-    private char prefix = '!';
-    private String[] aliases = {"@evilbot", "evilbot", "@evilbot#3634", "evilbot#3634"};
 
+    // The default prefix. This will be moved when the guild
+    // settings are created and finished.
+    private char prefix = '!';
+
+    // The constructor for this class.
     public MessageListener(EvilBot bot){
         this.bot = bot;
     }
@@ -26,11 +30,6 @@ public class MessageListener extends ListenerAdapter {
         if(args[0].charAt(0) == prefix){
             System.out.println(args[0].substring(1));
             bot.checkCommand(args[0].substring(1), event);
-        }else if(isInArray(aliases, args[0].toLowerCase())){
-            if(args[1] == null)
-                return;
-
-            bot.checkCommand((args[1].charAt(0) == prefix ? args[1].substring(1) : args[1]), event);
         }
     }
 }

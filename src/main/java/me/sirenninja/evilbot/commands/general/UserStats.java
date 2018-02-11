@@ -5,11 +5,25 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 
 public class UserStats implements Command {
+
+    private String[] aliases = {"userstats", "stat", "stats"};
+    private boolean enabled = true;
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
+    public void setEnabled(boolean state) {
+        enabled = state;
+    }
 
     @Override
     public String getCommand() {
@@ -18,7 +32,7 @@ public class UserStats implements Command {
 
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("userstats", "stat", "stats");
+        return Arrays.asList(aliases);
     }
 
     @Override
@@ -36,7 +50,7 @@ public class UserStats implements Command {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(member.getColor());
         builder.setThumbnail(member.getUser().getEffectiveAvatarUrl());
-        builder.setFooter("", member.getUser().getEffectiveAvatarUrl());
+        builder.setFooter("Information generated at: " + OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME), member.getUser().getEffectiveAvatarUrl());
         builder.setDescription("**User information (__" + member.getUser().getName() + "__):**")
                 .addField("Name:", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
                 .addField("Nickname:", member.getEffectiveName(), true)
