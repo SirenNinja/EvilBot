@@ -15,12 +15,12 @@ public class Ready extends ListenerAdapter {
     // The EvilBot instance.
     private EvilBot bot;
 
+    private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
     // The constructor for this class.
     public Ready(EvilBot bot){
         this.bot = bot;
     }
-
-    private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     @Override
     public void onReady(ReadyEvent event){
