@@ -82,7 +82,7 @@ public class EvilBot {
     }
 
     private static void addListeners(){
-        api.addListener(new MessageListener(bot), new JoinAndLeaveListeners(), new Ready(bot));
+        api.addListener(new MessageListener(bot), new JoinAndLeaveListeners(bot), new Ready(bot));
     }
 
     /**
