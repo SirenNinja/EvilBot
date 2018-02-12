@@ -25,13 +25,14 @@ public class EvilBot {
      * Add role support for the commands.
      * Add cooldown for commands. (possibly role based.)
      * Add more settings (changeable prefix, bot name, etc.)
-     * Join / leave messages (and make them modifiable).
+     * Join / leave messages (and make them modifiable.)
      * Logs (kicks, bans, deletes, etc.)
      * Auto role.
      * Toggleable commands.
      * Verification like thing.
      * Custom responses for some commands.
      * ADD A DAMN HELP COMMAND.
+     *
      *
      * TODO PROGRESSIVELY:
      * Add commands.
@@ -130,5 +131,14 @@ public class EvilBot {
      */
     public static EvilBot getBot() {
         return bot;
+    }
+
+    /**
+     * The instance of the API.
+     * @return
+     *        The API instance.
+     */
+    public EvilBotAPI getApi(){
+        return api;
     }
 }

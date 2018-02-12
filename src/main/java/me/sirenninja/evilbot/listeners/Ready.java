@@ -20,9 +20,11 @@ public class Ready extends ListenerAdapter {
         this.bot = bot;
     }
 
+    private ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+
     @Override
     public void onReady(ReadyEvent event){
-        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        event.getJDA().getGuilds().forEach(guilds -> bot.getApi().addGuild(guilds));
 
         // The runnable that checks the bots Game and sets it appropriately from the config.properties file.
         Runnable runnable = () -> {

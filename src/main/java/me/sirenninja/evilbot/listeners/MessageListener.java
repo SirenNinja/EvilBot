@@ -13,7 +13,6 @@ public class MessageListener extends ListenerAdapter {
 
     // The default prefix. This will be moved when the guild
     // settings are created and finished.
-    private char prefix = '!';
 
     // The constructor for this class.
     public MessageListener(EvilBot bot){
@@ -27,7 +26,7 @@ public class MessageListener extends ListenerAdapter {
 
         String[] args = event.getMessage().getContentRaw().split(" ");
 
-        if(args[0].charAt(0) == prefix){
+        if(args[0].charAt(0) == bot.getApi().findGuild(event.getGuild()).getPrefix()){
             System.out.println(args[0].substring(1));
             bot.checkCommand(args[0].substring(1), event);
         }

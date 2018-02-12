@@ -1,10 +1,13 @@
 package me.sirenninja.evilbot;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.data.GuildData;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class EvilBotAPI {
@@ -18,12 +21,15 @@ public class EvilBotAPI {
     // The List of commands (used by classes.)
     private List<Command> commands = new ArrayList<>();
 
+    // The HashMap that contains all the Guilds, and all if their data.
+    private HashMap<Guild, GuildData> guildData = new HashMap<>();
+
     /**
      * Allows other programs to hook into EvilBot and use the API to add commands and listeners.
      * @param bot
      *        The EvilBot instance.
      */
-    public EvilBotAPI(EvilBot bot){
+    EvilBotAPI(EvilBot bot){
         if(api != null)
             api = this;
 
@@ -109,6 +115,40 @@ public class EvilBotAPI {
         return clazz.isEnabled();
     }
 
+    /**
+     * Adds a guild to the HashMap.
+     * @param guild
+     *        The Discords Guild.
+     */
+    public void addGuild(Guild guild){
+        guildData.put(guild, new GuildData(guild));
+    }
+
+    /**
+     * Adds a collection of guilds to the HashMap.
+     * @param guilds
+     *        The collection of Discord Guilds.
+     */
+    public void addGuild(Guild... guilds){
+        for(Guild guild : guilds)
+            addGuild(guild);
+    }
+
+    /**
+     * Finds the Guild's data (If the data doesn't exist, it'll create it and return the new one.)
+     * @param guild
+     *        The Discord servers Guild.
+     * @return
+     *        The Guild's data.
+     */
+    public GuildData findGuild(Guild guild){
+        if(guildData.containsKey(guild))
+            return guildData.get(guild);
+
+        addGuild(guild);
+
+        return this.guildData.get(guild);
+    }
 
     /**
      * Get's the commands List.
@@ -117,5 +157,14 @@ public class EvilBotAPI {
      */
     public List<Command> getCommands(){
         return commands;
+    }
+
+    /**
+     * Grabs the entire guildData HashMap.
+     * @return
+     *        The guildData HashMap.
+     */
+    public HashMap<Guild, GuildData> getGuildData(){
+        return guildData;
     }
 }
