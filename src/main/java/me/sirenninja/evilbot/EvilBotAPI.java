@@ -2,6 +2,7 @@ package me.sirenninja.evilbot;
 
 import me.sirenninja.evilbot.commands.Command;
 import me.sirenninja.evilbot.data.GuildData;
+import me.sirenninja.evilbot.plugins.Plugin;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;

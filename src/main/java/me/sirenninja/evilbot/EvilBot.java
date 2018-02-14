@@ -7,14 +7,20 @@ import me.sirenninja.evilbot.data.Data;
 import me.sirenninja.evilbot.listeners.JoinAndLeaveListeners;
 import me.sirenninja.evilbot.listeners.MessageListener;
 import me.sirenninja.evilbot.listeners.Ready;
+import me.sirenninja.evilbot.plugins.Plugin;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.jar.JarFile;
 
 public class EvilBot {
 
@@ -53,10 +59,17 @@ public class EvilBot {
     private static Data data;
     private static EvilBotAPI api;
 
+    private static String pluginsFolder = "plugins";
+    private static ArrayList<Plugin> plugins = new ArrayList<>();
+
     public static void main(String[] args) throws Exception{
         data = new Data();
         bot = new EvilBot();
-        api = new EvilBotAPI(bot).getAPI();
+        api = new EvilBotAPI(bot);
+
+        File folder = new File(pluginsFolder);
+        if(!(folder.exists()))
+            folder.mkdir();
 
         // Checks if the DISCORD API KEY was added.
         if(data.getKey().equalsIgnoreCase("DISCORD-API-KEY")) {
@@ -64,13 +77,14 @@ public class EvilBot {
             return;
         }
 
-        addCommands();
-
         // Builds the bot and starts it.
         jda = new JDABuilder(AccountType.BOT).setToken(data.getKey()).setStatus(OnlineStatus.valueOf(data.getStatus())).buildAsync();
         jda.setAutoReconnect(true);
 
+        addCommands();
         addListeners();
+
+        loadPlugins(folder);
     }
 
     /**
@@ -78,11 +92,61 @@ public class EvilBot {
      * This is where all of the commands get added.
      */
     private static void addCommands(){
-        api.addCommand(new EightBall(), new UserStats());
+        getBot().getApi().addCommand(new EightBall(), new UserStats());
     }
 
     private static void addListeners(){
-        api.addListener(new MessageListener(bot), new JoinAndLeaveListeners(bot), new Ready(bot));
+        getBot().getApi().addListener(new MessageListener(getBot()), new JoinAndLeaveListeners(getBot()), new Ready(getBot()));
+    }
+
+    private static void loadPlugins(File folder){
+        File[] files = folder.listFiles((dir, name) -> name.endsWith(".jar"));
+        ArrayList<URL> urls = new ArrayList<>();
+        ArrayList<String> classes = new ArrayList<>();
+
+        if(!(files == null)){
+            Arrays.asList(files).forEach(file -> {
+                try{
+                    JarFile jarFile = new JarFile(file);
+                    urls.add(new URL("jar:file:" + pluginsFolder + "/" + file.getName() + "!/"));
+
+                    jarFile.stream().forEach(jarEntry -> classes.add(jarEntry.getName()));
+                }catch(Exception ex){
+                    System.out.println(ex.getMessage());
+                }
+            });
+
+            URLClassLoader pluginLoader = new URLClassLoader(urls.toArray(new URL[urls.size()]));
+            classes.forEach(s -> {
+                try{
+                    Class clazz = pluginLoader.loadClass(s.replaceAll("/", ".").replace(".class", ""));
+                    Class[] interfaces = clazz.getInterfaces();
+
+                    for(Class anInterface : interfaces){
+                        if(anInterface == EvilBotPlugin.class){
+                            EvilBotPlugin plugin = (EvilBotPlugin) clazz.newInstance();
+                            plugin.onLoad();
+
+                            plugins.add(new Plugin(plugin));
+                        }
+                    }
+                }catch(Exception ex){
+                    System.out.println(ex.getMessage());
+                }
+            });
+        }
+
+        StringBuilder builder = new StringBuilder("Plugins loaded: ");
+        String message = "%name% [%version%]";
+        for(Plugin plugin : plugins)
+            builder.append(message.replace("%name%", plugin.getName()).replace("%version%", plugin.getVersion())).append(", ");
+
+        if(builder.length() > 16)
+            builder.setLength(builder.length()-2);
+        else
+            builder.append("None.");
+
+        System.out.println(builder.toString());
     }
 
     /**
@@ -94,7 +158,14 @@ public class EvilBot {
      */
     public void checkCommand(String command, MessageReceivedEvent event){
         for(Command c : api.getCommands()){
-            List<String> aliases = c.getAliases();
+
+            List<String> aliases = new ArrayList<>();
+
+            try{
+                aliases = c.getAliases();
+            }catch(Exception ex){
+                System.out.println("Command has no aliases!");
+            }
 
             if(c.getCommand().equalsIgnoreCase(command) || aliases.contains(command.toLowerCase())){
                 if(!(c.isEnabled()))

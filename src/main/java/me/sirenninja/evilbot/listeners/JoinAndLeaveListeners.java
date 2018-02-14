@@ -34,5 +34,4 @@ public class JoinAndLeaveListeners extends ListenerAdapter {
         if(guildData.isLeaveMessageEnabled())
             event.getGuild().getTextChannelsByName(guildData.getJoinAndLeaveMessageChannel(), true).get(0).sendMessage(embedBuilder("Member Has Left!", " ", guildData.getLeftMessage(), null, Color.RED).build()).complete();
     }
-
 }
