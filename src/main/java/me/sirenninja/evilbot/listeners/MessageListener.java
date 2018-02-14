@@ -4,8 +4,6 @@ import me.sirenninja.evilbot.EvilBot;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
-import static me.sirenninja.evilbot.utils.Utils.isInArray;
-
 public class MessageListener extends ListenerAdapter {
 
     // The EvilBot instance.

@@ -1,7 +1,9 @@
 package me.sirenninja.evilbot;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.fun.CoinFlip;
 import me.sirenninja.evilbot.commands.fun.EightBall;
+import me.sirenninja.evilbot.commands.fun.RockPaperScissors;
 import me.sirenninja.evilbot.commands.general.UserStats;
 import me.sirenninja.evilbot.data.Data;
 import me.sirenninja.evilbot.listeners.JoinAndLeaveListeners;
@@ -15,6 +17,7 @@ import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
@@ -59,6 +62,7 @@ public class EvilBot {
     private static Data data;
     private static EvilBotAPI api;
 
+    // Plugin stuff.
     private static String pluginsFolder = "plugins";
     private static ArrayList<Plugin> plugins = new ArrayList<>();
 
@@ -92,13 +96,21 @@ public class EvilBot {
      * This is where all of the commands get added.
      */
     private static void addCommands(){
-        getBot().getApi().addCommand(new EightBall(), new UserStats());
+        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors());
     }
 
+    /**
+     * Simply just adds the premade listeners.
+     */
     private static void addListeners(){
         getBot().getApi().addListener(new MessageListener(getBot()), new JoinAndLeaveListeners(getBot()), new Ready(getBot()));
     }
 
+    /**
+     * Loads the plugins.
+     * @param folder
+     *        Folder where the plugins reside.
+     */
     private static void loadPlugins(File folder){
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".jar"));
         ArrayList<URL> urls = new ArrayList<>();
@@ -112,7 +124,7 @@ public class EvilBot {
 
                     jarFile.stream().forEach(jarEntry -> classes.add(jarEntry.getName()));
                 }catch(Exception ex){
-                    System.out.println(ex.getMessage());
+                    ex.printStackTrace();
                 }
             });
 
@@ -128,25 +140,18 @@ public class EvilBot {
                             plugin.onLoad();
 
                             plugins.add(new Plugin(plugin));
+
+                            System.out.println("Plugin loaded: " + plugin.pluginName() + " [" + plugin.pluginVersion() + "] by " + plugin.pluginAuthor());
                         }
                     }
                 }catch(Exception ex){
-                    System.out.println(ex.getMessage());
+                    if(ex instanceof ClassNotFoundException)
+                        return;
+
+                    ex.printStackTrace();
                 }
             });
         }
-
-        StringBuilder builder = new StringBuilder("Plugins loaded: ");
-        String message = "%name% [%version%]";
-        for(Plugin plugin : plugins)
-            builder.append(message.replace("%name%", plugin.getName()).replace("%version%", plugin.getVersion())).append(", ");
-
-        if(builder.length() > 16)
-            builder.setLength(builder.length()-2);
-        else
-            builder.append("None.");
-
-        System.out.println(builder.toString());
     }
 
     /**
@@ -159,20 +164,18 @@ public class EvilBot {
     public void checkCommand(String command, MessageReceivedEvent event){
         for(Command c : api.getCommands()){
 
-            List<String> aliases = new ArrayList<>();
+            List<String> aliases = c.getAliases();
 
             try{
-                aliases = c.getAliases();
-            }catch(Exception ex){
-                System.out.println("Command has no aliases!");
-            }
+                if(c.getCommand().equalsIgnoreCase(command) || (!aliases.isEmpty() && aliases.contains(command.toLowerCase()))){
+                    if(!(c.isEnabled()))
+                        return;
 
-            if(c.getCommand().equalsIgnoreCase(command) || aliases.contains(command.toLowerCase())){
-                if(!(c.isEnabled()))
+                    c.onCommand(event);
                     return;
-
-                c.onCommand(event);
-                return;
+                }
+            }catch(Exception ex){
+                System.out.println("Command probably doesn't exist.");
             }
         }
     }

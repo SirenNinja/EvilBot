@@ -9,10 +9,6 @@ import java.util.Random;
 
 public class Utils {
 
-    public static boolean isInArray(Object[] array, Object value){
-        return Arrays.asList(array).contains(value);
-    }
-
     /**
      * Checks if the string is actually a number using Regex.
      * @param s
@@ -22,6 +18,19 @@ public class Utils {
      */
     public static boolean isNumber(String s){
         return s.matches("\\d+");
+    }
+
+    /**
+     * Checks if an array contains the value.
+     * @param array
+     *        The Object array.
+     * @param value
+     *        The value that needs to be checked.
+     * @return
+     *        True if the value is in the array, else false.
+     */
+    public static boolean arrayContains(Object[] array, Object value) {
+        return Arrays.asList(array).contains(value);
     }
 
     /**

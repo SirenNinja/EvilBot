@@ -50,7 +50,7 @@ public class Data {
     public String getStatus(){
         String[] statuses = {"ONLINE", "OFFLINE", "DO_NOT_DISTURB", "IDLE", "INVISIBLE", "UNKNOWN"};
 
-        if(isInArray(statuses, properties.getProperty("status")))
+        if(arrayContains(statuses, properties.getProperty("status")))
             return properties.getProperty("status").toUpperCase();
 
         return "ONLINE";
