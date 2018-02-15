@@ -39,6 +39,6 @@ public interface Command {
      * @param event
      *        The MessageReceivedEvent event.
      */
-    void onCommand(MessageReceivedEvent event);
+    void onCommand(String[] args, MessageReceivedEvent event);
 
 }

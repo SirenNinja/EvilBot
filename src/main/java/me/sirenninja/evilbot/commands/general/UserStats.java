@@ -36,7 +36,7 @@ public class UserStats implements Command {
     }
 
     @Override
-    public void onCommand(MessageReceivedEvent event) {
+    public void onCommand(String[] args, MessageReceivedEvent event) {
         Member member = event.getMember();
 
         String game = "null";

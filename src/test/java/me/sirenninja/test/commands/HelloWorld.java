@@ -30,7 +30,7 @@ public class HelloWorld implements Command {
     }
 
     @Override
-    public void onCommand(MessageReceivedEvent event) {
+    public void onCommand(String[] args, MessageReceivedEvent event) {
         event.getChannel().sendMessage("Hello world!").complete();
     }
 }

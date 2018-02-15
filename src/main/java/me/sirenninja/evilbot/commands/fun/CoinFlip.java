@@ -35,8 +35,8 @@ public class CoinFlip implements Command {
     }
 
     @Override
-    public void onCommand(MessageReceivedEvent event) {
-        // Lulz...
+    public void onCommand(String[] args, MessageReceivedEvent event) {
+        // Lulz... the more there are, the more random it'll be, I guess.
         String[] sides = {"Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", "Heads", "Tails", };
 
         int side = 0;

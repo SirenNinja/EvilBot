@@ -17,11 +17,11 @@ import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.jar.JarFile;
 
@@ -162,8 +162,12 @@ public class EvilBot {
      *        The MessageReceivedEvent event.
      */
     public void checkCommand(String command, MessageReceivedEvent event){
-        for(Command c : api.getCommands()){
+        List<String> argsList = new LinkedList<>(Arrays.asList(event.getMessage().getContentRaw().split(" ")));
 
+        if(argsList.get(0).equalsIgnoreCase(getJDA().getSelfUser().getAsMention()))
+            argsList.remove(0);
+
+        for(Command c : api.getCommands()){
             List<String> aliases = c.getAliases();
 
             try{
@@ -171,7 +175,7 @@ public class EvilBot {
                     if(!(c.isEnabled()))
                         return;
 
-                    c.onCommand(event);
+                    c.onCommand(argsList.toArray(new String[0]), event);
                     return;
                 }
             }catch(Exception ex){

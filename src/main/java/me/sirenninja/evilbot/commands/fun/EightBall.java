@@ -33,9 +33,7 @@ public class EightBall implements Command {
     }
 
     @Override
-    public void onCommand(MessageReceivedEvent event){
-        String[] args = event.getMessage().getContentRaw().split(" ");
-
+    public void onCommand(String[] args, MessageReceivedEvent event){
         if(args.length > 3)
             event.getChannel().sendMessage("8ball says: " + getRandomAnswer()).complete();
     }

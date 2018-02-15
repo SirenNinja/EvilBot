@@ -1,7 +1,6 @@
 package me.sirenninja.evilbot.commands.fun;
 
 import me.sirenninja.evilbot.commands.Command;
-import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.awt.*;
@@ -37,8 +36,7 @@ public class RockPaperScissors implements Command {
     }
 
     @Override
-    public void onCommand(MessageReceivedEvent event) {
-        String[] args = event.getMessage().getContentRaw().split(" ");
+    public void onCommand(String[] args, MessageReceivedEvent event) {
         String[] correctArgs = {"rock", "paper", "scissors"};
 
         if(!(arrayContains(correctArgs, args[1].toLowerCase()))){
