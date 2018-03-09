@@ -2,6 +2,7 @@ package me.sirenninja.evilbot.commands.fun;
 
 import me.sirenninja.evilbot.commands.Command;
 import me.sirenninja.evilbot.utils.Utils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.awt.*;
@@ -11,6 +12,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class Translator implements Command {
@@ -62,7 +65,18 @@ public class Translator implements Command {
         }
 
         try{
-            event.getChannel().sendMessage(Utils.embedBuilder("Translator", "From **" + from + "** to **" + to + "**", translate(from, to, message.toString()), null, Color.BLUE).build()).complete();
+            EmbedBuilder builder = new EmbedBuilder();
+            builder.setColor(Color.GREEN);
+            builder.setThumbnail(event.getMember().getUser().getEffectiveAvatarUrl());
+            builder.setFooter("Information generated at: " + OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME), event.getMember().getUser().getEffectiveAvatarUrl());
+            builder.setDescription("**Generated translation:**")
+                    .addField("Translation From:", "**" + from + "**", true)
+                    .addField("Translation To:", "**" + to + "**", true)
+                    .addBlankField(false)
+                    .addField("Translation:", translate(from, to, message.toString()), false)
+                    .addBlankField(false);
+
+            event.getChannel().sendMessage(builder.build()).complete();
         }catch(Exception ex){
             ex.printStackTrace();
         }
@@ -83,7 +97,6 @@ public class Translator implements Command {
 
         in.close();
 
-        System.out.println(response.toString());
         return response.toString();
     }
 }
