@@ -4,6 +4,7 @@ import me.sirenninja.evilbot.commands.Command;
 import me.sirenninja.evilbot.commands.fun.CoinFlip;
 import me.sirenninja.evilbot.commands.fun.EightBall;
 import me.sirenninja.evilbot.commands.fun.RockPaperScissors;
+import me.sirenninja.evilbot.commands.fun.Translator;
 import me.sirenninja.evilbot.commands.general.UserStats;
 import me.sirenninja.evilbot.data.Data;
 import me.sirenninja.evilbot.listeners.JoinAndLeaveListeners;
@@ -96,7 +97,7 @@ public class EvilBot {
      * This is where all of the commands get added.
      */
     private static void addCommands(){
-        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors());
+        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors(), new Translator());
     }
 
     /**
