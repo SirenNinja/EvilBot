@@ -19,11 +19,10 @@ public class MessageListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event){
-        if(event.getMember().getUser().isBot() || event.getMember().getUser() == event.getJDA().getSelfUser())
+        if(event.getMember().getUser().isBot() || event.getMember().getUser() == event.getJDA().getSelfUser() || event.getMessage().getAttachments().size() > 0)
             return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
-
 
         if(args[0].charAt(0) == bot.getApi().findGuild(event.getGuild()).getPrefix()){
             System.out.println("Command used: " + args[0].substring(1));

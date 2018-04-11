@@ -13,6 +13,8 @@ public class GuildData {
     private String joinMessage;
     private String leftMessage;
 
+    private String loggingChannel;
+
     public GuildData(Guild guild){
         this.guild = guild;
         prefix = '!';
@@ -22,6 +24,8 @@ public class GuildData {
         hasLeaveMessageEnabled = true;
         joinMessage = "Welcome member!";
         leftMessage = "Member has left!";
+
+        loggingChannel = "logs";
     }
 
     /**
@@ -139,6 +143,14 @@ public class GuildData {
      */
     public void setLeftMessage(String leftMessage) {
         this.leftMessage = leftMessage;
+    }
+
+    public String getLoggingChannel(){
+        return loggingChannel;
+    }
+
+    public void setLoggingChannel(String channel){
+        loggingChannel = channel;
     }
 
 }

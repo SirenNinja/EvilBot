@@ -1,11 +1,16 @@
 package me.sirenninja.evilbot.commands.fun;
 
 import me.sirenninja.evilbot.commands.Command;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+
+import static me.sirenninja.evilbot.utils.Utils.getRandomColor;
 
 public class EightBall implements Command {
 
@@ -34,8 +39,20 @@ public class EightBall implements Command {
 
     @Override
     public void onCommand(String[] args, MessageReceivedEvent event){
-        if(args.length > 3)
-            event.getChannel().sendMessage("8ball says: " + getRandomAnswer()).complete();
+        StringBuilder sBuilder = new StringBuilder();
+
+        for(int i = 0; i < args.length; i++)
+            sBuilder.append(args[i]).append(" ");
+
+        EmbedBuilder builder = new EmbedBuilder();
+        builder.setColor(getRandomColor());
+        builder.setFooter("Information generated at: " + OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME), event.getMember().getUser().getEffectiveAvatarUrl());
+        builder.setDescription("**8Ball**")
+                .addField("Question:", sBuilder.toString(), false)
+                .addBlankField(false)
+                .addField("8Ball Says:", getRandomAnswer(), false);
+
+            event.getChannel().sendMessage(builder.build()).complete();
     }
 
     private String getRandomAnswer(){
@@ -62,12 +79,7 @@ public class EightBall implements Command {
                 "Very doubtful."
         };
 
-        int reply = 0;
         Random random = new Random();
-
-        for(int i = 0; i < 67; i++)
-            reply = random.nextInt(replies.length);
-
-        return replies[reply];
+        return replies[random.nextInt(replies.length)];
     }
 }

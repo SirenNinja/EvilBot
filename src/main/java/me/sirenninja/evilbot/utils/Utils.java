@@ -20,6 +20,10 @@ public class Utils {
         return s.matches("\\d+");
     }
 
+    public static String capitalizeFirstCharacter(String s){
+        return s.length() == 0 ? s : s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
+
     /**
      * Checks if an array contains the value.
      * @param array

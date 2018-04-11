@@ -1,20 +1,16 @@
 package me.sirenninja.evilbot;
 
 import me.sirenninja.evilbot.commands.Command;
-import me.sirenninja.evilbot.commands.fun.CoinFlip;
-import me.sirenninja.evilbot.commands.fun.EightBall;
-import me.sirenninja.evilbot.commands.fun.RockPaperScissors;
-import me.sirenninja.evilbot.commands.fun.Translator;
+import me.sirenninja.evilbot.commands.fun.*;
 import me.sirenninja.evilbot.commands.general.UserStats;
 import me.sirenninja.evilbot.data.Data;
 import me.sirenninja.evilbot.listeners.JoinAndLeaveListeners;
+import me.sirenninja.evilbot.listeners.LoggingListeners;
 import me.sirenninja.evilbot.listeners.MessageListener;
 import me.sirenninja.evilbot.listeners.Ready;
 import me.sirenninja.evilbot.plugins.Plugin;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.*;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.File;
@@ -53,7 +49,6 @@ public class EvilBot {
      * Twitter / YouTube / Twitch / Mixer notifications.
      * Leveling system.
      */
-
 
     // The bot instance.
     private static EvilBot bot;
@@ -97,14 +92,14 @@ public class EvilBot {
      * This is where all of the commands get added.
      */
     private static void addCommands(){
-        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors(), new Translator());
+        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors(), new Translator(), new MathEx());
     }
 
     /**
      * Simply just adds the premade listeners.
      */
     private static void addListeners(){
-        getBot().getApi().addListener(new MessageListener(getBot()), new JoinAndLeaveListeners(getBot()), new Ready(getBot()));
+        getBot().getApi().addListener(new MessageListener(getBot()), new JoinAndLeaveListeners(getBot()), new Ready(getBot()), new LoggingListeners(getBot()));
     }
 
     /**
@@ -176,12 +171,13 @@ public class EvilBot {
                     if(!(c.isEnabled()))
                         return;
 
+                    if(event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
+                        event.getMessage().delete().complete();
+
                     c.onCommand(argsList.toArray(new String[0]), event);
                     return;
                 }
-            }catch(Exception ex){
-                System.out.println("Command probably doesn't exist.");
-            }
+            }catch(Exception ignored){}
         }
     }
 
