@@ -1,7 +1,7 @@
 package me.sirenninja.test.commands;
 
 import me.sirenninja.evilbot.commands.Command;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import me.sirenninja.evilbot.commands.CommandHandler;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class HelloWorld implements Command {
     }
 
     @Override
-    public void onCommand(String[] args, MessageReceivedEvent event) {
-        event.getChannel().sendMessage("Hello world!").complete();
+    public void onCommand(String[] args, CommandHandler handler) {
+        handler.sendMessage("Hello world!");
     }
 }

@@ -1,9 +1,9 @@
 package me.sirenninja.evilbot.commands.general;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -36,9 +36,13 @@ public class UserStats implements Command {
     }
 
     @Override
-    public void onCommand(String[] args, MessageReceivedEvent event) {
-        Member member = event.getMember();
+    public void onCommand(String[] args, CommandHandler handler) {
+        if(!(handler.isGuild())){
+            System.out.println(handler.getEvent().getChannelType());
+            return;
+        }
 
+        Member member = handler.getMember();
         String game = "null";
 
         try{
@@ -50,7 +54,7 @@ public class UserStats implements Command {
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(member.getColor());
         builder.setThumbnail(member.getUser().getEffectiveAvatarUrl());
-        builder.setFooter("Information generated at: " + OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME), member.getUser().getEffectiveAvatarUrl());
+        builder.setFooter("Information generated at: " + handler.getEvent().getMessage().getCreationTime().format(DateTimeFormatter.RFC_1123_DATE_TIME), member.getUser().getEffectiveAvatarUrl());
         builder.setDescription("**User information (__" + member.getUser().getName() + "__):**")
                 .addField("Name:", member.getUser().getName() + "#" + member.getUser().getDiscriminator(), true)
                 .addField("Nickname:", member.getEffectiveName(), true)
@@ -62,6 +66,6 @@ public class UserStats implements Command {
                 .addField("Joined Discord:", member.getUser().getCreationTime().format(DateTimeFormatter.RFC_1123_DATE_TIME), true)
                 .addField("Joined This Guild:", member.getJoinDate().format(DateTimeFormatter.RFC_1123_DATE_TIME), true);
 
-        event.getChannel().sendMessage(builder.build()).complete();
+        handler.sendMessage(builder);
     }
 }

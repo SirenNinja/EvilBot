@@ -1,8 +1,8 @@
 package me.sirenninja.evilbot.commands.fun;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.awt.*;
 import java.time.OffsetDateTime;
@@ -13,7 +13,6 @@ import java.util.Random;
 
 import static me.sirenninja.evilbot.utils.Utils.arrayContains;
 import static me.sirenninja.evilbot.utils.Utils.capitalizeFirstCharacter;
-import static me.sirenninja.evilbot.utils.Utils.embedBuilder;
 
 public class RockPaperScissors implements Command {
 
@@ -41,11 +40,11 @@ public class RockPaperScissors implements Command {
     }
 
     @Override
-    public void onCommand(String[] args, MessageReceivedEvent event) {
+    public void onCommand(String[] args, CommandHandler handler) {
         String[] correctArgs = {"rock", "paper", "scissors"};
 
         if(!(arrayContains(correctArgs, args[1].toLowerCase()))){
-            event.getChannel().sendMessage(event.getAuthor().getAsMention() + ", please use !rps [rock, paper, scissors].").complete();
+            handler.sendMessage(handler.getUser().getAsMention() + ", please use !rps [rock, paper, scissors].");
             return;
         }
 
@@ -57,15 +56,15 @@ public class RockPaperScissors implements Command {
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor((user.equalsIgnoreCase(bot) ? Color.GRAY : (didUserWin(user, bot) ? Color.GREEN : Color.RED)));
-        builder.setThumbnail(event.getMember().getUser().getEffectiveAvatarUrl());
-        builder.setFooter("Information generated at: " + OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME), event.getMember().getUser().getEffectiveAvatarUrl());
+        builder.setThumbnail(handler.getUser().getEffectiveAvatarUrl());
+        builder.setFooter("Information generated at: " + handler.getEvent().getMessage().getCreationTime().format(DateTimeFormatter.RFC_1123_DATE_TIME), handler.getUser().getEffectiveAvatarUrl());
         builder.setDescription("**Rock Paper Scissors**")
                 .addField("You chose:", capitalizeFirstCharacter(user), true)
                 .addField("Bot chose:", capitalizeFirstCharacter(bot), true)
                 .addBlankField(false)
-                .addField("Result:", (user.equalsIgnoreCase(bot) ? "Draw!" : (didUserWin(user, bot) ? "You won!" : "Bot one!")), false);
+                .addField("Result:", (user.equalsIgnoreCase(bot) ? "Draw!" : (didUserWin(user, bot) ? "You won!" : "Bot won!")), false);
 
-        event.getChannel().sendMessage(builder.build()).complete();
+        handler.sendMessage(builder);
     }
 
     private boolean didUserWin(String user, String bot){

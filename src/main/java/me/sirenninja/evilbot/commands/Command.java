@@ -1,6 +1,7 @@
 package me.sirenninja.evilbot.commands;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.util.List;
 
@@ -36,9 +37,9 @@ public interface Command {
 
     /**
      * When the bot finds a command, this void gets called.
-     * @param event
-     *        The MessageReceivedEvent event.
+     * @param handler
+     *        The CommandHandler class.
      */
-    void onCommand(String[] args, MessageReceivedEvent event);
+    void onCommand(String[] args, CommandHandler handler);
 
 }

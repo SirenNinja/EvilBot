@@ -1,6 +1,7 @@
 package me.sirenninja.evilbot.listeners;
 
 import me.sirenninja.evilbot.EvilBot;
+import me.sirenninja.evilbot.data.GuildData;
 import net.dv8tion.jda.core.events.guild.GuildBanEvent;
 import net.dv8tion.jda.core.events.guild.GuildUnbanEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
@@ -11,6 +12,10 @@ import net.dv8tion.jda.core.events.role.RoleCreateEvent;
 import net.dv8tion.jda.core.events.role.RoleDeleteEvent;
 import net.dv8tion.jda.core.events.user.UserTypingEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
+
+import java.awt.*;
+
+import static me.sirenninja.evilbot.utils.Utils.embedBuilder;
 
 public class LoggingListeners extends ListenerAdapter {
 
@@ -59,11 +64,4 @@ public class LoggingListeners extends ListenerAdapter {
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event){
         // log.
     }
-
-    @Override
-    public void onUserTyping(UserTypingEvent event){
-        // Shhhhh....
-        // event.getTextChannel().sendMessage(event.getMember().getAsMention() + " Shut up!").complete();
-    }
-
 }

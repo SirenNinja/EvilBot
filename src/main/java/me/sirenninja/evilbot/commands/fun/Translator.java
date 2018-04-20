@@ -1,9 +1,10 @@
 package me.sirenninja.evilbot.commands.fun;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.CommandHandler;
 import me.sirenninja.evilbot.utils.Utils;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.awt.*;
 import java.io.BufferedReader;
@@ -42,7 +43,7 @@ public class Translator implements Command {
     }
 
     @Override
-    public void onCommand(String[] args, MessageReceivedEvent event) {
+    public void onCommand(String[] args, CommandHandler handler) {
         String from = "";
         String to = "";
 
@@ -60,15 +61,15 @@ public class Translator implements Command {
         }
 
         if(from.isEmpty() || to.isEmpty()){
-            event.getChannel().sendMessage(Utils.embedBuilder("Translator", " ", "Error: Please specify the **from** and **to** languages. \nExample: !translate from:en to:ru <message>", null, Color.RED).build()).complete();
+            handler.sendMessage(Utils.embedBuilder("Translator", " ", "Error: Please specify the **from** and **to** languages. \nExample: !translate from:en to:ru <message>", null, Color.RED));
             return;
         }
 
         try{
             EmbedBuilder builder = new EmbedBuilder();
             builder.setColor(Color.GREEN);
-            builder.setThumbnail(event.getMember().getUser().getEffectiveAvatarUrl());
-            builder.setFooter("Information generated at: " + OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME), event.getMember().getUser().getEffectiveAvatarUrl());
+            builder.setThumbnail(handler.getUser().getEffectiveAvatarUrl());
+            builder.setFooter("Information generated at: " + handler.getEvent().getMessage().getCreationTime().format(DateTimeFormatter.RFC_1123_DATE_TIME), handler.getUser().getEffectiveAvatarUrl());
             builder.setDescription("**Generated translation:**")
                     .addField("Translation From:", "**" + from + "**", true)
                     .addField("Translation To:", "**" + to + "**", true)
@@ -76,7 +77,7 @@ public class Translator implements Command {
                     .addField("Translation:", translate(from, to, message.toString()), false)
                     .addBlankField(false);
 
-            event.getChannel().sendMessage(builder.build()).complete();
+            handler.sendMessage(builder);
         }catch(Exception ex){
             ex.printStackTrace();
         }

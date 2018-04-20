@@ -1,7 +1,9 @@
 package me.sirenninja.evilbot;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.CommandHandler;
 import me.sirenninja.evilbot.commands.fun.*;
+import me.sirenninja.evilbot.commands.general.Ping;
 import me.sirenninja.evilbot.commands.general.UserStats;
 import me.sirenninja.evilbot.data.Data;
 import me.sirenninja.evilbot.listeners.JoinAndLeaveListeners;
@@ -10,8 +12,10 @@ import me.sirenninja.evilbot.listeners.MessageListener;
 import me.sirenninja.evilbot.listeners.Ready;
 import me.sirenninja.evilbot.plugins.Plugin;
 import net.dv8tion.jda.core.*;
-import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Game;
+import net.dv8tion.jda.core.events.Event;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.io.File;
 import java.net.URL;
@@ -79,6 +83,7 @@ public class EvilBot {
 
         // Builds the bot and starts it.
         jda = new JDABuilder(AccountType.BOT).setToken(data.getKey()).setStatus(OnlineStatus.valueOf(data.getStatus())).buildAsync();
+        jda.getPresence().setPresence(Game.playing("Initializing..."), false);
         jda.setAutoReconnect(true);
 
         addCommands();
@@ -92,7 +97,7 @@ public class EvilBot {
      * This is where all of the commands get added.
      */
     private static void addCommands(){
-        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors(), new Translator(), new MathEx());
+        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors(), new Translator(), new MathEx(), new Ping(), new MorseCodeToText(), new TextToMorseCode());
     }
 
     /**
@@ -130,14 +135,14 @@ public class EvilBot {
                     Class clazz = pluginLoader.loadClass(s.replaceAll("/", ".").replace(".class", ""));
                     Class[] interfaces = clazz.getInterfaces();
 
-                    for(Class anInterface : interfaces){
-                        if(anInterface == EvilBotPlugin.class){
+                    for(Class face : interfaces){
+                        if(face == EvilBotPlugin.class){
                             EvilBotPlugin plugin = (EvilBotPlugin) clazz.newInstance();
                             plugin.onLoad();
 
                             plugins.add(new Plugin(plugin));
 
-                            System.out.println("Plugin loaded: " + plugin.pluginName() + " [" + plugin.pluginVersion() + "] by " + plugin.pluginAuthor());
+                            System.out.println(String.format("Plugin loaded: %s [%s] by %s", plugin.pluginName(), plugin.pluginVersion(), plugin.pluginAuthor()));
                         }
                     }
                 }catch(Exception ex){
@@ -157,8 +162,8 @@ public class EvilBot {
      * @param event
      *        The MessageReceivedEvent event.
      */
-    public void checkCommand(String command, MessageReceivedEvent event){
-        List<String> argsList = new LinkedList<>(Arrays.asList(event.getMessage().getContentRaw().split(" ")));
+    public void checkCommand(String command, String message, MessageReceivedEvent event){
+        List<String> argsList = new LinkedList<>(Arrays.asList(message.split(" ")));
 
         if(argsList.get(0).equalsIgnoreCase(getJDA().getSelfUser().getAsMention()))
             argsList.remove(0);
@@ -171,10 +176,10 @@ public class EvilBot {
                     if(!(c.isEnabled()))
                         return;
 
-                    if(event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
+                    if(event.getChannelType().isGuild() && event.getGuild().getSelfMember().hasPermission(Permission.MESSAGE_MANAGE))
                         event.getMessage().delete().complete();
 
-                    c.onCommand(argsList.toArray(new String[0]), event);
+                    c.onCommand(argsList.toArray(new String[0]), new CommandHandler(event));
                     return;
                 }
             }catch(Exception ignored){}

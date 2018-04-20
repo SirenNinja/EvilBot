@@ -19,17 +19,18 @@ public class MessageListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event){
-        if(event.getMember().getUser().isBot() || event.getMember().getUser() == event.getJDA().getSelfUser() || event.getMessage().getAttachments().size() > 0)
+        if(event.getAuthor().isBot() || event.getAuthor() == event.getJDA().getSelfUser() || event.getMessage().getAttachments().size() > 0)
             return;
 
         String[] args = event.getMessage().getContentRaw().split(" ");
+        Character c = (event.getChannelType().isGuild() ? bot.getApi().findGuild(event.getGuild()).getPrefix() : '!');
 
-        if(args[0].charAt(0) == bot.getApi().findGuild(event.getGuild()).getPrefix()){
-            System.out.println("Command used: " + args[0].substring(1));
-            bot.checkCommand(args[0].substring(1), event);
+        if(args[0].charAt(0) == c){
+            System.out.println(String.format("Command used in %s by %s#%s: %s", (event.getChannelType().isGuild() ? event.getGuild().getName() : "PM"), event.getAuthor().getName(), event.getAuthor().getDiscriminator(), args[0].substring(1)));
+            bot.checkCommand(args[0].substring(1), event.getMessage().getContentRaw(), event);
         }else if(args[0].equalsIgnoreCase(event.getJDA().getSelfUser().getAsMention())){
-            System.out.println("Command used (from mentioning): " + args[1]);
-            bot.checkCommand(args[1], event);
+            System.out.println(String.format("Command used (from mentioning) in %s by %s#%s: %s", (event.getChannelType().isGuild() ? event.getGuild().getName() : "PM"), event.getAuthor().getName(), event.getAuthor().getDiscriminator(), args[0].substring(1)));
+            bot.checkCommand(args[1], event.getMessage().getContentRaw(), event);
         }
     }
 }

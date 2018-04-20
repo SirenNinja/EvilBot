@@ -1,8 +1,9 @@
 package me.sirenninja.evilbot.commands.fun;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.CommandHandler;
 import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.events.message.guild.GuildMessageReceivedEvent;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
@@ -38,21 +39,21 @@ public class EightBall implements Command {
     }
 
     @Override
-    public void onCommand(String[] args, MessageReceivedEvent event){
+    public void onCommand(String[] args, CommandHandler handler){
         StringBuilder sBuilder = new StringBuilder();
 
-        for(int i = 0; i < args.length; i++)
+        for(int i = 1; i < args.length; i++)
             sBuilder.append(args[i]).append(" ");
 
         EmbedBuilder builder = new EmbedBuilder();
         builder.setColor(getRandomColor());
-        builder.setFooter("Information generated at: " + OffsetDateTime.now().format(DateTimeFormatter.RFC_1123_DATE_TIME), event.getMember().getUser().getEffectiveAvatarUrl());
+        builder.setFooter("Information generated at: " + handler.getEvent().getMessage().getCreationTime().format(DateTimeFormatter.RFC_1123_DATE_TIME), handler.getUser().getEffectiveAvatarUrl());
         builder.setDescription("**8Ball**")
                 .addField("Question:", sBuilder.toString(), false)
                 .addBlankField(false)
                 .addField("8Ball Says:", getRandomAnswer(), false);
 
-            event.getChannel().sendMessage(builder.build()).complete();
+            handler.sendMessage(builder);
     }
 
     private String getRandomAnswer(){
@@ -65,13 +66,12 @@ public class EightBall implements Command {
                 "It is decidedly so.",
                 "Without a doubt.",
                 "Yes, definitely.",
+                "Definitely not.",
                 "You may rely on it.",
                 "As I see it, Yes.",
                 "Most likely.",
                 "Outlook good.",
                 "Signs point to yes.",
-                "Cannot predict now.",
-                "Concentrate and ask again.",
                 "Don't count on it.",
                 "My reply is no.",
                 "My sources say no.",

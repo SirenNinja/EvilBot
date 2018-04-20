@@ -143,12 +143,10 @@ public class EvilBotAPI {
      *        The Guild's data.
      */
     public GuildData findGuild(Guild guild){
-        if(guildData.containsKey(guild))
-            return guildData.get(guild);
+        if(!guildData.containsKey(guild))
+            addGuild(guild);
 
-        addGuild(guild);
-
-        return this.guildData.get(guild);
+        return guildData.get(guild);
     }
 
     /**

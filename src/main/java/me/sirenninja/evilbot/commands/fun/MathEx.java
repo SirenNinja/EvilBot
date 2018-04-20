@@ -1,9 +1,9 @@
 package me.sirenninja.evilbot.commands.fun;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.CommandHandler;
 import me.sirenninja.evilbot.utils.math.Calculator;
 import me.sirenninja.evilbot.utils.math.ExpressionParser;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.util.List;
 
@@ -32,7 +32,7 @@ public class MathEx implements Command {
     }
 
     @Override
-    public void onCommand(String[] args, MessageReceivedEvent event) {
+    public void onCommand(String[] args, CommandHandler handler) {
         StringBuilder builder = new StringBuilder();
 
         for(int i = 1; i < args.length; i++)
@@ -41,7 +41,7 @@ public class MathEx implements Command {
         ExpressionParser<Double> parser = Calculator.DoubleProcessor.createParser();
 
         try{
-            event.getChannel().sendMessage("Result: " + parser.parse(builder.toString())).complete();
+            handler.sendMessage("Result: " + parser.parse(builder.toString()));
         }catch(Exception ex){
             ex.printStackTrace();
         }

@@ -13,6 +13,7 @@ public class GuildData {
     private String joinMessage;
     private String leftMessage;
 
+    private boolean logging;
     private String loggingChannel;
 
     public GuildData(Guild guild){
@@ -25,6 +26,7 @@ public class GuildData {
         joinMessage = "Welcome member!";
         leftMessage = "Member has left!";
 
+        logging = true;
         loggingChannel = "logs";
     }
 
@@ -151,6 +153,14 @@ public class GuildData {
 
     public void setLoggingChannel(String channel){
         loggingChannel = channel;
+    }
+
+    public boolean isLogging(){
+        return logging;
+    }
+
+    public void setLogging(boolean state){
+        this.logging = state;
     }
 
 }
