@@ -2,11 +2,16 @@ package me.sirenninja.evilbot.listeners;
 
 import me.sirenninja.evilbot.EvilBot;
 import me.sirenninja.evilbot.data.GuildData;
+import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberLeaveEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.awt.*;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static me.sirenninja.evilbot.utils.Utils.getRandomColor;
 import static me.sirenninja.evilbot.utils.Utils.embedBuilder;

@@ -97,7 +97,7 @@ public class EvilBot {
      * This is where all of the commands get added.
      */
     private static void addCommands(){
-        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors(), new Translator(), new MathEx(), new Ping(), new MorseCodeToText(), new TextToMorseCode());
+        getBot().getApi().addCommand(new EightBall(), new UserStats(), new CoinFlip(), new RockPaperScissors(), new Translator(), new MathEx(), new Ping(), new MorseCodeToText(), new TextToMorseCode(), new Trivia(getBot()));
     }
 
     /**

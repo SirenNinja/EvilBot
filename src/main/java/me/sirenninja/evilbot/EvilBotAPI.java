@@ -1,15 +1,20 @@
 package me.sirenninja.evilbot;
 
 import me.sirenninja.evilbot.commands.Command;
+import me.sirenninja.evilbot.commands.fun.Trivia;
 import me.sirenninja.evilbot.data.GuildData;
 import me.sirenninja.evilbot.plugins.Plugin;
+import me.sirenninja.evilbot.utils.trivia.Question;
+import me.sirenninja.evilbot.utils.trivia.TriviaManager;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EvilBotAPI {
 
@@ -25,6 +30,12 @@ public class EvilBotAPI {
     // The HashMap that contains all the Guilds, and all if their data.
     private HashMap<Guild, GuildData> guildData = new HashMap<>();
 
+    private TriviaManager triviaManager;
+
+    private List<Question> questions = new ArrayList<>();
+
+    private Map<Member, Question> playingTrivia = new HashMap<>();
+
     /**
      * Allows other programs to hook into EvilBot and use the API to add commands and listeners.
      * @param bot
@@ -35,6 +46,8 @@ public class EvilBotAPI {
             api = this;
 
         this.bot = bot;
+        this.triviaManager = new TriviaManager(this);
+        this.triviaManager.addNewQuestions(10);
     }
 
     /**
@@ -165,5 +178,17 @@ public class EvilBotAPI {
      */
     public HashMap<Guild, GuildData> getGuildData(){
         return guildData;
+    }
+
+    public TriviaManager getTriviaManager(){
+        return this.triviaManager;
+    }
+
+    public List<Question> getQuestions(){
+        return this.questions;
+    }
+
+    public Map<Member, Question> getPlayingTrivia() {
+        return playingTrivia;
     }
 }

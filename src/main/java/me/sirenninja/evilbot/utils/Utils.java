@@ -1,11 +1,10 @@
 package me.sirenninja.evilbot.utils;
 
-import me.sirenninja.evilbot.EvilBotAPI;
 import net.dv8tion.jda.core.EmbedBuilder;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.Random;
+import java.util.*;
+import java.util.List;
 
 public class Utils {
 
